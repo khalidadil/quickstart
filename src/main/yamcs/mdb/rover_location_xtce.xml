@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpaceSystem name="roverlocation" xmlns="http://www.omg.org/spec/XTCE/20180204" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/XTCE/20180204 https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
+	<TelemetryMetaData>
+		<ParameterTypeSet>
+			<FloatParameterType name="float_t">
+				<UnitSet />
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+		</ParameterTypeSet>
+		<ParameterSet>
+			<Parameter name="Rover_Latitude" parameterTypeRef="float_t" >
+                <ParameterProperties dataSource="local"/>
+            </Parameter>
+			<Parameter name="Rover_Longitude" parameterTypeRef="float_t" >
+                <ParameterProperties dataSource="local"/>
+            </Parameter>
+		</ParameterSet>
+		<ContainerSet>
+			<SequenceContainer name="Rover_Position">
+				<EntryList>
+					<ParameterRefEntry parameterRef="Rover_Longitude" />
+					<ParameterRefEntry parameterRef="Rover_Latitude" />
+				</EntryList>
+			</SequenceContainer>
+		</ContainerSet>
+	</TelemetryMetaData>
+</SpaceSystem>
