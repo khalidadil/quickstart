@@ -7,7 +7,7 @@ services:
 dataDir: yamcs-data
 
 instances:
-  - roverlocation
+  - myproject
 
 # Secret key unique to a particular Yamcs installation.
 # This is used to provide cryptographic signing.

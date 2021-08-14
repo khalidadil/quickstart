@@ -15,7 +15,7 @@ from random import random
 seed(1)
 
 yamcs_address = "localhost:8090"
-plant_name = "roverlocation"
+plant_name = "myproject"
 plant_str = "/" + plant_name + "/"
 client = YamcsClient(yamcs_address)
 processor = client.get_processor(instance=plant_name, processor='realtime')
