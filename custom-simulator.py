@@ -1,18 +1,8 @@
-import os
-import time
-from time import gmtime, strftime
-import datetime
-import dateutil.parser
-from datetime import timedelta
-
 from time import sleep
 from clint.textui import colored
 from yamcs.client import YamcsClient
 import math
-
-from random import seed
-from random import random
-seed(1)
+import csv
 
 yamcs_address = "localhost:8090"
 plant_name = "roverlocation"
@@ -20,46 +10,39 @@ plant_str = "/" + plant_name + "/"
 client = YamcsClient(yamcs_address)
 processor = client.get_processor(instance=plant_name, processor='realtime')
 
-def initializeParameters():
+telemetry_file_path = 'rover_mock_path.csv'
+
+def initializeParameters(latitude, longitude):
     try:
-        print(colored.cyan("\n\t\t  * * Attempting to set parameters * *\n"))
-        random_latitude = 0 + (random() * (90 - 0))
-        print('Latitude: ' + str(random_latitude))
-        random_longitude = 0 + (random() * (180 - 0))
-        print('Longitude: ' + str(random_longitude))
-        processor.set_parameter_value(plant_str + "Rover_Latitude", round(random_latitude, 4))
-        processor.set_parameter_value(plant_str + "Rover_Longitude", round(random_longitude, 4))
-        print(colored.cyan("\n\t\t  * * Latitude and Logitude have been set. * *\n"))
+        print(colored.cyan("\n* * Attempting to set parameters * *\n"))
+        print('Latitude: ' + latitude)
+        print('Longitude: ' + longitude)
+        processor.set_parameter_value(plant_str + "Rover_Latitude", float(latitude))
+        processor.set_parameter_value(plant_str + "Rover_Longitude", float(longitude))
+        print(colored.green("\n* * Latitude and Logitude have been set. * *\n"))
     except:
-        print(colored.magenta("\n\t\tConnection Error:  Initialization has failed.\n\n\n"))
+        print(colored.magenta("\nError: Failed to set parameters.\n\n\n"))
 
-
-def endFn(): 
-    while(True):
-        sleep(1.5)
-        if(True):
-            connected = True
-            try:
-                processor.get_parameter_value(plant_str + "Rover_Latitude")
-                processor.get_parameter_value(plant_str + "Rover_Longitude")
-            except:
-                connected = False
-            if(connected == False):
-                print(colored.red("\t\tDISCONNECTED" + "\n"))
-                global initialized
-                initialized = False
-                break
+def read_from_file(path):
+    with open(path) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        num_rows = len(list(csv_reader))
+    with open(path) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 1
+        for row in csv_reader:
+            if line_count == 1:
+                line_count += 1
+            elif line_count == num_rows:
+                initializeParameters(row[0], row[1])
+                sleep(3)
+                print(colored.magenta("\n* * Reading file from start. * *\n"))
+                read_from_file(path)
             else:
-                print("\n\n") 
-                print("DONE") 
-                print("\n\n") 
-
-
-def mainLoop(): 
-    while(True):
-        initializeParameters()
-        sleep(3)
+                line_count += 1
+                initializeParameters(row[0], row[1])
+                sleep(3)
 
 if __name__ == "__main__":
-    print('starting!')
-    mainLoop()
+    print(colored.magenta("\n* * Starting Program... * *\n"))
+    read_from_file(telemetry_file_path)
