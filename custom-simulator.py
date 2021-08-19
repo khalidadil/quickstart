@@ -1,7 +1,6 @@
 from time import sleep
 from clint.textui import colored
 from yamcs.client import YamcsClient
-import math
 import csv
 
 yamcs_address = "localhost:8090"
