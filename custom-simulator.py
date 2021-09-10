@@ -4,10 +4,11 @@ from yamcs.client import YamcsClient
 import csv
 
 yamcs_address = "localhost:8090"
-plant_name = "roverlocation"
-plant_str = "/" + plant_name + "/"
+instance_name = "viper"
+system_name = "ViperGround"
+system_path = "/" + system_name + "/"
 client = YamcsClient(yamcs_address)
-processor = client.get_processor(instance=plant_name, processor='realtime')
+processor = client.get_processor(instance=instance_name, processor='realtime')
 
 telemetry_file_path = 'rover_mock_path.csv'
 sleep_duration = 3
@@ -17,8 +18,8 @@ def initializeParameters(latitude, longitude):
         print(colored.cyan("\n* * Attempting to set parameters * *\n"))
         print('Latitude: ' + latitude)
         print('Longitude: ' + longitude)
-        processor.set_parameter_value(plant_str + "Rover_Latitude", float(latitude))
-        processor.set_parameter_value(plant_str + "Rover_Longitude", float(longitude))
+        processor.set_parameter_value(system_path + "Rover_Latitude", float(latitude))
+        processor.set_parameter_value(system_path + "Rover_Longitude", float(longitude))
         print(colored.green("\n* * Latitude and Logitude have been set. * *\n"))
     except:
         print(colored.magenta("\nError: Failed to set parameters.\n\n\n"))
